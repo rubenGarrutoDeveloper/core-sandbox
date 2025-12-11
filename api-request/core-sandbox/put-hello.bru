@@ -1,0 +1,16 @@
+meta {
+  name: put-hello
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{core-sandbox-root}}/hello
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
