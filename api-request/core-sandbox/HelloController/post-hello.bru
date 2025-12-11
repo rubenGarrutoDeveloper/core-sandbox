@@ -1,13 +1,20 @@
 meta {
-  name: put-hello
+  name: post-hello
   type: http
   seq: 3
 }
 
-get {
+post {
   url: {{core-sandbox-root}}/hello
-  body: none
+  body: json
   auth: inherit
+}
+
+body:json {
+  {
+      "message": "Buona Giornata!",
+      "sender": "Ruben"
+  }
 }
 
 settings {
