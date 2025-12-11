@@ -3,13 +3,14 @@ package com.spring_compendium.core_sandbox;
 import com.spring_compendium.core_sandbox.costants.ApiPaths;
 import com.spring_compendium.core_sandbox.dto.Greeting;
 import com.spring_compendium.core_sandbox.service.IdGeneratorService;
-import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,5 +48,21 @@ public class HelloController {
         logger.info("POST "+ApiPaths.HELLO+" - New Greeting received. Assigned ID: " + newId);
 
         return greeting;
+    }
+
+    @GetMapping("/{name}")
+    public Greeting greetUser(@PathVariable String name) {
+        logger.info("GET "+ApiPaths.HELLO+"/"+name);
+        // ... Spring assegnerà "Marco" alla variabile 'name' se l'URL è /api/hello/Marco
+        return new Greeting("Ciao, " + name + "...", "PathVariable Demo");
+    }
+
+    @GetMapping("/search")
+    public String searchGreetings(
+            @RequestParam(name = "level") String level,
+            @RequestParam(name = "sortBy", required = false) String sortBy) {
+
+        logger.info("GET "+ApiPaths.HELLO+"/search?level="+level+"&sortBy="+sortBy);
+        return "Search level: " + level + ", sortBy: " + sortBy;
     }
 }

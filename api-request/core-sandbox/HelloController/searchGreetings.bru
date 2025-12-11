@@ -1,0 +1,21 @@
+meta {
+  name: searchGreetings
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{core-sandbox-root}}/hello/search?level=junior&sortBy=name
+  body: none
+  auth: inherit
+}
+
+params:query {
+  level: junior
+  sortBy: name
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
