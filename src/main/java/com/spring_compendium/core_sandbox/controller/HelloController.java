@@ -1,11 +1,11 @@
-package com.spring_compendium.core_sandbox;
+package com.spring_compendium.core_sandbox.controller;
 
 import com.spring_compendium.core_sandbox.costants.ApiPaths;
 import com.spring_compendium.core_sandbox.dto.Greeting;
 import com.spring_compendium.core_sandbox.exception.ResourceNotFoundException;
 import com.spring_compendium.core_sandbox.service.IdGeneratorService;
 
-import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -48,7 +47,7 @@ public class HelloController {
     // 2. POST /api/hello - CREATE
     // Nuova implementazione con ResponseEntity.created() per 201 Created + Header Location.
     @PostMapping
-    public ResponseEntity<Greeting> createGreeting(@RequestBody Greeting greeting) {
+    public ResponseEntity<Greeting> createGreeting(@Valid @RequestBody Greeting greeting) {
 
         // 1. Assegna l'ID
         long newId = idGeneratorService.getNextId();

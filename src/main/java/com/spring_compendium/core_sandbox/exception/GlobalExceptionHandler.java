@@ -1,12 +1,20 @@
-package com.spring_compendium.core_sandbox;
+package com.spring_compendium.core_sandbox.exception;
 
 import com.spring_compendium.core_sandbox.dto.ErrorDetails;
 import com.spring_compendium.core_sandbox.exception.ResourceNotFoundException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Classe che funge da Gestore di Eccezioni centralizzato.
@@ -14,7 +22,7 @@ import org.springframework.web.context.request.WebRequest;
  * garantendo che l'output sia formattato in JSON.
  */
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
      * Questo metodo intercetta tutte le eccezioni di tipo ResourceNotFoundException
@@ -35,6 +43,31 @@ public class GlobalExceptionHandler {
 
         // Restituisce Status 404 NOT FOUND e il body strutturato
         return new ResponseEntity<>(errorDetails, status);
+    }
+
+    /**
+     *  VALIDAZIONE (@Valid fallito).
+     * Sovrascrive il metodo della classe padre per catturare l'eccezione
+     * MethodArgumentNotValidException e restituire una Map con tutti gli errori.
+     */
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex,
+            HttpHeaders headers,
+            HttpStatusCode status,
+            WebRequest request) {
+
+        Map<String, String> errors = new HashMap<>();
+
+        // Estrai tutti gli errori di campo e costruisci la Map: <fieldName, errorMessage>
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+
+        // Restituisce Status 400 BAD REQUEST con la Map dettagliata degli errori
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
     /**
