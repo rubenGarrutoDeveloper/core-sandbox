@@ -2,6 +2,7 @@ package com.spring_compendium.core_sandbox;
 
 import com.spring_compendium.core_sandbox.costants.ApiPaths;
 import com.spring_compendium.core_sandbox.dto.Greeting;
+import com.spring_compendium.core_sandbox.exception.ResourceNotFoundException;
 import com.spring_compendium.core_sandbox.service.IdGeneratorService;
 
 import org.springframework.http.HttpStatus;
@@ -70,6 +71,14 @@ public class HelloController {
     @GetMapping("/{name}")
     public Greeting greetUser(@PathVariable String name) {
         logger.info("GET "+ApiPaths.HELLO+"/"+name);
+
+
+        if(name.equals("NotFound")) {
+            logger.info("GET "+ApiPaths.HELLO+"/"+name+" - Forbidden");
+            throw new ResourceNotFoundException("Resource not found");
+        }
+
+
         // ... Spring assegnerà "Marco" alla variabile 'name' se l'URL è /api/hello/Marco
         return new Greeting("Ciao, " + name + "...", "PathVariable Demo");
     }
