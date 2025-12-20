@@ -1,3 +1,6 @@
 vars:pre-request {
-  core-sandbox-root: http://localhost:8080/api
+  ip-dev: 127.0.0.1
+  port-dev: 8080
+  root: http://{{ip-dev}}:{{port-dev}}
+  core-sandbox-root: {{root}}/api
 }

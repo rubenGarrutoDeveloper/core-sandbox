@@ -1,0 +1,16 @@
+meta {
+  name: actuator
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{root}}/actuator
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
