@@ -1,8 +1,8 @@
-vars:pre-request {
-  ip-dev: 127.0.0.1
-  port-dev: 8080
-  root: http://{{ip-dev}}:{{port-dev}}
-  core-sandbox-root: {{root}}/api
-  user: user
-  password: 640cee08-27bb-43da-8c21-e8e765e148d5
+auth {
+  mode: basic
+}
+
+auth:basic {
+  username: {{user}}
+  password: {{password}}
 }
