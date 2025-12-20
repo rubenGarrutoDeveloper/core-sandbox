@@ -1,6 +1,8 @@
 package com.spring_compendium.core_sandbox;
 
 import com.spring_compendium.core_sandbox.manager.NotificationManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -9,6 +11,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 public class CoreSandboxApplication {
 
 	public static void main(String[] args) {
+
 		// Avvia il Container Spring e restituisce il contesto
 		SpringApplication.run(CoreSandboxApplication.class, args);
 	}

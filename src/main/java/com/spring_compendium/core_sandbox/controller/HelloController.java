@@ -5,7 +5,9 @@ import com.spring_compendium.core_sandbox.dto.Greeting;
 import com.spring_compendium.core_sandbox.exception.ResourceNotFoundException;
 import com.spring_compendium.core_sandbox.service.IdGeneratorService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
 
 @RestController
 @RequestMapping(ApiPaths.HELLO)
 public class HelloController {
 
-    Logger logger = Logger.getLogger(HelloController.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(HelloController.class.getName());
 
     // Best Practice: DI tramite costruttore (campo final)
     private final IdGeneratorService idGeneratorService;
@@ -37,10 +39,12 @@ public class HelloController {
     // Nuova implementazione con ResponseEntity.ok() per un 200 OK esplicito.
     @GetMapping
     public ResponseEntity<Greeting> hello() {
-        logger.info("GET /api/hello - Base");
-        Greeting greeting = new Greeting("Benvenuto nel mondo REST!", "ResponseEntity Demo");
 
-        // Restituisce Status 200 OK
+        Greeting greeting = new Greeting(
+                "Benvenuto nel mondo REST!",
+                "ResponseEntity Demo"
+        );
+
         return ResponseEntity.ok(greeting);
     }
 
@@ -53,7 +57,7 @@ public class HelloController {
         long newId = idGeneratorService.getNextId();
         greeting.setId(newId);
 
-        logger.info("POST /api/hello - New Greeting received. Assigned ID: " + newId);
+        logger.debug("POST /api/hello - New Greeting received. Assigned ID: " + newId);
 
         // 2. Costruisce l'URI della nuova risorsa (es. /api/hello/1)
         // Questa è la Best Practice per le risposte 201 Created.
@@ -69,11 +73,9 @@ public class HelloController {
 
     @GetMapping("/{name}")
     public Greeting greetUser(@PathVariable String name) {
-        logger.info("GET "+ApiPaths.HELLO+"/"+name);
-
 
         if(name.equals("NotFound")) {
-            logger.info("GET "+ApiPaths.HELLO+"/"+name+" - Forbidden");
+            logger.warn("GET "+ApiPaths.HELLO+"/"+name+" - Forbidden");
             throw new ResourceNotFoundException("Resource not found");
         }
 
@@ -87,7 +89,7 @@ public class HelloController {
             @RequestParam(name = "level") String level,
             @RequestParam(name = "sortBy", required = false) String sortBy) {
 
-        logger.info("GET "+ApiPaths.HELLO+"/search?level="+level+"&sortBy="+sortBy);
+        logger.debug("GET "+ApiPaths.HELLO+"/search?level="+level+"&sortBy="+sortBy);
         return "Search level: " + level + ", sortBy: " + sortBy;
     }
 }
